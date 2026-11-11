@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Al-Dheeniyya Arabic College | Records Management</title>
+  <meta name="description" content="Luxury premium Islamic 3D records management system for Al-Dheeniyya Arabic College, featuring comprehensive student, staff, marks, attendance, certificates, and ID card administration." />
+  <meta property="og:title" content="Al-Dheeniyya Arabic College | Records Management" />
+  <meta property="og:description" content="Luxury premium Islamic 3D records management system for Al-Dheeniyya Arabic College, featuring comprehensive student, staff, marks, attendance, certificates, and ID card administration." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style id="pgs"></style>
+</head>
+<body>
+  <!-- Grand Islamic Luxury 3D Sign In Portal -->
+  <div id="login" class="login">
+    <canvas id="canvas3d-login" class="canvas3d-login"></canvas>
+    <div class="card">
+      <div class="login-crest-wrap">
+        <div class="login-crest-ring">
+          <img class="brandlogo" alt="Al-Dheeniyya Arabic College" src="/images/logo.png">
+        </div>
+        <div class="bismillah-calligraphy">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        <h1>Al-Dheeniyya Arabic College</h1>
+        <p class="login-subtitle">كُلِّيَّة الدِّيْنِيَّة العَرَبِيَّة · Administrator Sign In</p>
+      </div>
+
+      <div class="field" style="margin-top:14px;text-align:left">
+        <label for="user">Email or username</label>
+        <input id="user" type="text" autocomplete="username" autocapitalize="none" placeholder="admin or email">
+      </div>
+      <div class="field" style="margin-top:14px;text-align:left">
+        <label for="pass">Password</label>
+        <input id="pass" type="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+
+      <button class="btn primary" style="width:100%;margin-top:22px;padding:12px;" id="lbtn" onclick="login()">Sign in to Portal</button>
+      <div class="err" id="lerr"></div>
+
+      <p style="font-size:13px;margin:12px 0 0">
+        <a href="#" onclick="adminSignup();return false">Create administrator account</a> &nbsp;·&nbsp; 
+        <a href="#" onclick="adminForgot();return false">Forgot password</a>
+      </p>
+      <p class="muted" style="font-size:12px;margin:10px 0 0;opacity:0.85">The first account created on a new database becomes the administrator.</p>
+    </div>
+  </div>
+
+  <!-- Main Authenticated Portal -->
+  <div id="app" class="hidden">
+    <!-- Regal Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-crest-wrap">
+          <img class="brandlogo" alt="Al-Dheeniyya Arabic College" src="/images/logo.png">
+        </div>
+        <div class="brand-text">
+          <b class="brand-title">AL-DHEENIYYA</b>
+          <small class="brand-arabic">كُلِّيَّة الدِّيْنِيَّة العَرَبِيَّة</small>
+          <span class="brand-sub">Records Management</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button data-v="dashboard" class="active" onclick="go('dashboard')">
+          <span class="nav-icon">۞</span> <span>Dashboard</span>
+        </button>
+        <button data-v="students" onclick="go('students')">
+          <span class="nav-icon">◉</span> <span>Students</span>
+        </button>
+        <button data-v="staff" onclick="go('staff')">
+          <span class="nav-icon">♙</span> <span>Teachers &amp; Staff</span>
+        </button>
+        <button data-v="documents" onclick="go('documents')">
+          <span class="nav-icon">▤</span> <span>Documents</span>
+        </button>
+        <button data-v="marks" onclick="go('marks')">
+          <span class="nav-icon">✎</span> <span>Mark Sheets</span>
+        </button>
+        <button data-v="attendance" onclick="go('attendance')">
+          <span class="nav-icon">✔</span> <span>Attendance</span>
+        </button>
+        <button data-v="birthdays" onclick="go('birthdays')">
+          <span class="nav-icon">✿</span> <span>Birthdays</span>
+          <b id="bdn" class="badge warn navb hidden" style="margin-left:auto"></b>
+        </button>
+        <button data-v="teachers" onclick="go('teachers')">
+          <span class="nav-icon">☎</span> <span>Class Teachers</span>
+        </button>
+        <button data-v="reports" onclick="go('reports')">
+          <span class="nav-icon">▥</span> <span>Reports</span>
+        </button>
+        <button data-v="notices" onclick="go('notices')">
+          <span class="nav-icon">📢</span> <span>Notice Board</span>
+          <b id="noticesBadge" class="badge warn navb hidden" style="margin-left:auto"></b>
+        </button>
+        <button data-v="settings" onclick="go('settings')">
+          <span class="nav-icon">⚙</span> <span>Settings</span>
+        </button>
+
+        <button class="out" onclick="logout()">
+          <span class="nav-icon">↪</span> <span>Sign out</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <!-- Official Institutional Print Header (Shown only on physical print/PDF) -->
+      <div id="printHeader" class="print-only">
+        <div class="print-header-inner">
+          <img src="/images/logo.png" class="print-logo brandlogo" alt="Al-Dheeniyya Emblem">
+          <div class="print-title-wrap">
+            <h2>AL-DHEENIYYA ARABIC COLLEGE</h2>
+            <div class="print-arabic">كُلِّيَّة الدِّيْنِيَّة العَرَبِيَّة</div>
+            <p class="print-sub">Knowledge · Deeds · Propagation | MRCA Reg. No: AC-2018-0442 | Colombo, Sri Lanka</p>
+            <div class="print-meta-line">
+              <span id="printDocTitle">Official Institutional Register</span> · 
+              <span id="printDateGregorian"></span> · 
+              <span id="printDateHijri"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <header class="top">
+        <div class="top-title-area">
+          <div class="islamic-date-bar">
+            <span class="hijri-badge"><span class="moon-icon">☪</span> <span id="hijriDateText">Loading Hijri date…</span></span>
+            <span class="date-sep">·</span>
+            <span class="greg-text" id="gregDateText"></span>
+          </div>
+          <h1 id="title">Dashboard</h1>
+          <p class="muted" id="today" style="display:none"></p>
+        </div>
+
+        <div class="top-actions">
+          <div class="user" id="sync" onclick="syncNow()" style="cursor:pointer" title="Click to sync with online college database">● Connecting…</div>
+        </div>
+      </header>
+
+      <!-- 1. DASHBOARD VIEW -->
+      <section id="dashboard" class="view active">
+        <div class="hero" id="hero"></div>
+        <div id="bdbanner"></div>
+        <div id="bk"></div>
+        <div class="stats" id="stats"></div>
+
+        <div class="grid2">
+          <div class="card">
+            <h2>Needs attention</h2>
+            <ul class="rows" id="attn"></ul>
+          </div>
+          <div>
+            <div class="card">
+              <h2>Add a record</h2>
+              <div class="quick">
+                <button onclick="openForm('student')">＋ Student<small>Create student file</small></button>
+                <button onclick="openForm('staff')">＋ Staff<small>Add faculty/staff</small></button>
+                <button onclick="openNoticeForm()">📢 Notice<small>Publish circular</small></button>
+                <button onclick="openMarkForm()">✎ Exam Mark<small>Enter single mark</small></button>
+                <button onclick="openForm('doc')">＋ Document<small>Log student document</small></button>
+                <button onclick="printView('dashboard','Institutional Overview')">🖨 Print<small>Print summary</small></button>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Document status</h2>
+              <div class="seg" id="seg"></div>
+              <div class="legend" id="legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Campus Circulars on Dashboard -->
+        <div class="card" style="margin-top:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <h2 style="margin:0">📢 Notice Board &amp; Official Circulars</h2>
+            <div style="display:flex;gap:6px;">
+              <button class="btn secondary sm" onclick="go('notices')">View All Circulars</button>
+              <button class="btn primary sm" onclick="openNoticeForm()">＋ Post Announcement</button>
+            </div>
+          </div>
+          <ul class="rows" id="dashNotices"></ul>
+        </div>
+
+        <div class="card">
+          <h2>Incomplete student files</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>ID</th><th>Name</th><th>Class</th><th>Required documents</th></tr>
+              </thead>
+              <tbody id="incomplete"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <h2>Active students by class</h2>
+            <div id="byclass"></div>
+          </div>
+          <div class="card">
+            <h2>Birthdays this month</h2>
+            <ul class="rows" id="bdays"></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Our campus</h2>
+          <div class="gal" id="gal"></div>
+        </div>
+      </section>
+
+      <!-- 2. STUDENTS VIEW -->
+      <section id="students" class="view">
+        <div id="imp_student"></div>
+        <div class="card" style="margin:0">
+          <div class="toolbar">
+            <input id="sq" class="input grow" placeholder="Search by ID, name, class, guardian or phone" oninput="rStudents()" aria-label="Search students">
+            <select id="scl" onchange="rStudents()" aria-label="Class"></select>
+            <select id="sst" onchange="rStudents()" aria-label="Status">
+              <option value="">All statuses</option>
+              <option>Active</option>
+              <option>Inactive</option>
+              <option>Passed Out</option>
+            </select>
+            <select id="sbulk" onchange="bulkStatus(this)" aria-label="Change status of listed students">
+              <option value="">Set status of listed…</option>
+              <option>Active</option>
+              <option>Inactive</option>
+              <option>Passed Out</option>
+            </select>
+            <span class="exp noprint">
+              <button class="btn secondary" onclick="printView('students','Student Academic Register')">🖨 Print</button>
+              <button class="btn secondary" onclick="exp('student','pdf')">PDF</button>
+              <button class="btn secondary" onclick="exp('student','xlsx')">Excel</button>
+              <button class="btn secondary" onclick="bulkCards('student')">ID cards</button>
+            </span>
+            <button class="btn primary" onclick="openForm('student')">＋ Add student</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>Student ID</th><th>Full name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Documents</th><th>Status</th><th class="noprint" style="text-align:right;min-width:140px">Actions</th></tr>
+              </thead>
+              <tbody id="studentsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. TEACHERS & STAFF VIEW -->
+      <section id="staff" class="view">
+        <div id="imp_staff"></div>
+        <div class="card" style="margin:0">
+          <div class="toolbar">
+            <input id="tq" class="input grow" placeholder="Search by name, ID, designation or department" oninput="rStaff()" aria-label="Search staff">
+            <select id="tst" onchange="rStaff()" aria-label="Status">
+              <option value="">All statuses</option>
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+            <span class="exp noprint">
+              <button class="btn secondary" onclick="printView('staff','Faculty & Staff Register')">🖨 Print</button>
+              <button class="btn secondary" onclick="exp('staff','pdf')">PDF</button>
+              <button class="btn secondary" onclick="exp('staff','xlsx')">Excel</button>
+              <button class="btn secondary" onclick="bulkCards('staff')">ID cards</button>
+            </span>
+            <button class="btn primary" onclick="openForm('staff')">＋ Add teacher / staff</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>Employee ID</th><th>Name</th><th>Designation</th><th>Department</th><th>Phone</th><th>Joined</th><th>Status</th><th class="noprint" style="text-align:right;min-width:140px">Actions</th></tr>
+              </thead>
+              <tbody id="staffTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. DOCUMENTS VIEW -->
+      <section id="documents" class="view">
+        <div class="card" style="margin:0">
+          <div class="toolbar">
+            <input id="dq" class="input grow" placeholder="Search student, document type or reference" oninput="rDocs()" aria-label="Search documents">
+            <select id="dst" onchange="rDocs()" aria-label="Status">
+              <option value="">All statuses</option>
+              <option>Verified</option>
+              <option>Pending</option>
+              <option>Expired</option>
+            </select>
+            <span class="exp noprint">
+              <button class="btn secondary" onclick="printView('documents','Document Verification Registry')">🖨 Print</button>
+              <button class="btn secondary" onclick="exp('doc','pdf')">PDF</button>
+              <button class="btn secondary" onclick="exp('doc','xlsx')">Excel</button>
+            </span>
+            <button class="btn primary" onclick="openForm('doc')">＋ Add document</button>
+          </div>
+          <div class="doc-grid" id="docGrid"></div>
+        </div>
+      </section>
+
+      <!-- 5. MARK SHEETS VIEW -->
+      <section id="marks" class="view">
+        <div class="card" style="margin:0 0 16px">
+          <div class="toolbar" style="justify-content:space-between;margin-bottom:8px">
+            <div>
+              <h2 style="margin:0">Upload mark sheet</h2>
+              <p class="muted" style="margin:4px 0 0;font-size:13px">Upload an Excel (.xlsx, .xls) or CSV file to add many results at once.</p>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn primary" onclick="openMarkForm()">＋ Add Single Mark</button>
+              <button class="btn secondary" onclick="markTemplate()">Download template</button>
+            </div>
+          </div>
+          <div class="formgrid" style="grid-template-columns:2fr 1fr 1fr;margin-bottom:10px">
+            <div class="field">
+              <label for="m_exam">Exam name (used if the file has no Exam column)</label>
+              <input id="m_exam" placeholder="e.g. First Term Exam">
+            </div>
+            <div class="field">
+              <label for="m_year">Year</label>
+              <input id="m_year" type="number">
+            </div>
+            <div class="field">
+              <label for="m_max">Full marks</label>
+              <input id="m_max" type="number" value="100">
+            </div>
+          </div>
+          <div class="toolbar" style="margin-bottom:6px">
+            <input id="m_file" type="file" accept=".xlsx,.xls,.csv" class="input grow">
+            <button class="btn primary" onclick="importMarks()">Upload and add marks</button>
+          </div>
+          <p class="muted" style="font-size:13px;margin:6px 0 0">
+            <b>Columns:</b> Student ID, then either Subject and Marks (one row per subject) or one column per subject (Mathematics, Science, and so on). Optional: Exam, Year, Full Marks, Remarks. Write AB for absent. Uploading the same student, exam and subject again updates the mark.
+          </p>
+          <div id="m_res" style="margin-top:10px"></div>
+        </div>
+
+        <div class="card" style="margin:0 0 16px">
+          <h2>Enter marks by class</h2>
+          <div class="formgrid" style="grid-template-columns:repeat(5,1fr);margin-bottom:10px">
+            <div class="field"><label for="me_cls">Class</label><select id="me_cls" onchange="meLoad()"></select></div>
+            <div class="field"><label for="me_exam">Exam</label><input id="me_exam" list="me_exams" oninput="meLoad()" placeholder="First Term Exam"><datalist id="me_exams"></datalist></div>
+            <div class="field"><label for="me_year">Year</label><input id="me_year" type="number" oninput="meLoad()"></div>
+            <div class="field"><label for="me_sub">Subject</label><input id="me_sub" oninput="meLoad()" placeholder="Mathematics"></div>
+            <div class="field"><label for="me_max">Full marks</label><input id="me_max" type="number" value="100"></div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Student</th><th>ID</th><th>Marks (AB = absent)</th></tr></thead>
+              <tbody id="meTable"></tbody>
+            </table>
+          </div>
+          <button class="btn primary" style="margin-top:12px" onclick="saveME()">Save marks</button>
+        </div>
+
+        <div class="card" style="margin:0">
+          <div class="toolbar">
+            <input id="mq" class="input grow" placeholder="Search by student name or ID" oninput="rMarks()" aria-label="Search results">
+            <select id="mex" onchange="rMarks()" aria-label="Exam"></select>
+            <select id="mcl" onchange="rMarks()" aria-label="Class"></select>
+            <span class="exp noprint">
+              <button class="btn primary" onclick="openMarkForm()">＋ Add Single Mark</button>
+              <button class="btn secondary" onclick="printView('marks','Examination Marks Register')">🖨 Print</button>
+              <button class="btn secondary" onclick="exp('marks','pdf')">PDF</button>
+              <button class="btn secondary" onclick="exp('marks','xlsx')">Excel</button>
+            </span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Exam</th><th>Subjects</th><th>Total</th><th>Average</th><th>Grade</th><th class="noprint" style="text-align:right">Actions</th></tr></thead>
+              <tbody id="marksTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 6. ATTENDANCE VIEW -->
+      <section id="attendance" class="view">
+        <div class="card" style="margin:0 0 16px">
+          <div class="toolbar" style="margin-bottom:10px">
+            <select id="a_cls" onchange="attLoad()" aria-label="Class"></select>
+            <input id="a_mon" type="month" onchange="attLoad()" aria-label="Month">
+            <input id="a_days" type="number" min="1" max="31" placeholder="Academic days" style="width:150px" oninput="attCalc()" aria-label="Academic days in the month">
+            <button class="btn secondary" onclick="attAll()">All present</button>
+            <button class="btn primary" onclick="saveAtt()">Save attendance</button>
+            <span class="exp noprint">
+              <button class="btn secondary" onclick="exp('attendance','pdf')">PDF</button>
+              <button class="btn secondary" onclick="exp('attendance','xlsx')">Excel</button>
+            </span>
+          </div>
+          <p class="muted" style="font-size:13px;margin:0 0 10px">Academic days are the days the college was open for lessons that month. Attendance % = days present ÷ academic days. Leave a student blank to skip them.</p>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Student</th><th>ID</th><th>Days present</th><th>Days absent</th><th>Attendance</th></tr></thead>
+              <tbody id="attTable"></tbody>
+              <tfoot><tr><td colspan="4" style="text-align:right;font-weight:700">Class average</td><td id="attAvg">—</td></tr></tfoot>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin:0">
+          <h2>Attendance by month</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Month</th><th>Class</th><th>Academic days</th><th>Students</th><th>Average attendance</th></tr></thead>
+              <tbody id="attSum"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. BIRTHDAYS VIEW -->
+      <section id="birthdays" class="view">
+        <div id="bdtoday"></div>
+        <div class="grid2">
+          <div class="card" style="margin-top:0">
+            <h2>Coming up in the next 30 days</h2>
+            <ul class="rows" id="bdnext"></ul>
+          </div>
+          <div class="card" style="margin-top:0">
+            <h2>Birthday wish message</h2>
+            <div class="field">
+              <label for="w_pre">Style</label>
+              <select id="w_pre" onchange="wishPreset()">
+                <option value="formal">Academic and formal</option>
+                <option value="warm">Short and warm</option>
+                <option value="dua">Islamic dua</option>
+                <option value="custom">My own wording</option>
+              </select>
+            </div>
+            <div class="field" style="margin-top:10px">
+              <label for="w_txt">Message. You can use {name}, {college} and {principal}</label>
+              <textarea id="w_txt" style="min-height:170px" oninput="$('w_pre').value='custom'"></textarea>
+            </div>
+            <label style="display:flex;gap:8px;align-items:center;margin:10px 0;font-size:13px">
+              <input type="checkbox" id="w_rem"> Remind me on dashboard when a staff birthday is today
+            </label>
+            <button class="btn primary" onclick="saveWish()">Save message</button>
+            <p class="muted" style="font-size:12.5px;margin:12px 0 0">
+              The WhatsApp button opens WhatsApp with this message ready for that person.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Staff without a date of birth</h2>
+          <ul class="rows" id="bdmissing"></ul>
+        </div>
+      </section>
+
+      <!-- 8. CLASS TEACHERS VIEW -->
+      <section id="teachers" class="view">
+        <div class="card" style="margin:0 0 16px">
+          <h2>Class teacher app</h2>
+          <p class="muted" style="font-size:13px;margin:-6px 0 12px">Class teachers sign in on their phone with the credentials you create below. Everything they save updates here in real-time.</p>
+          <div class="toolbar" style="margin:0">
+            <input id="t_link" class="input grow" placeholder="Web address of the teacher app (paste it here)" aria-label="Teacher app address">
+            <button class="btn secondary" onclick="saveTLink()">Save</button>
+            <a id="t_wa" class="btn primary" target="_blank" rel="noopener">Share on WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin:0 0 16px">
+          <h2>Create staff login</h2>
+          <p class="muted" style="font-size:13px;margin:-6px 0 12px">Create each teacher's username and password.</p>
+          <div class="formgrid">
+            <div class="field"><label for="na_user">Username (no spaces)</label><input id="na_user" autocapitalize="none" autocomplete="off" placeholder="e.g. rahman.m"></div>
+            <div class="field"><label for="na_name">Full name</label><input id="na_name" list="pf_staff" autocomplete="off"></div>
+            <div class="field"><label for="na_pw">Password (at least 8 characters)</label><div style="display:flex;gap:8px"><input id="na_pw" autocomplete="new-password" style="flex:1"><button class="btn secondary" type="button" onclick="genPw()">Generate</button></div></div>
+            <div class="field full"><label>Class (each class has one class teacher)</label><div class="chk" id="na_cls"></div></div>
+          </div>
+          <div class="foot"><button class="btn primary" onclick="createStaff()">Create login</button></div>
+        </div>
+
+        <div class="card hidden" id="na_done" style="margin:0 0 16px"></div>
+
+        <div class="card" style="margin:0 0 16px">
+          <h2>People who can sign in</h2>
+          <p class="muted" style="font-size:13px;margin:-6px 0 12px">Reset a password, change a class, remove access or delete a login here.</p>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Username</th><th>Name</th><th>Access</th><th>Classes</th><th></th></tr></thead>
+              <tbody id="pfTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card hidden" id="pf_box" style="margin:0 0 16px">
+          <h2 id="pf_title">Access</h2>
+          <div class="formgrid">
+            <div class="field"><label for="pf_name">Name shown</label><input id="pf_name" list="pf_staff"><datalist id="pf_staff"></datalist></div>
+            <div class="field"><label for="pf_role">Access</label><select id="pf_role" onchange="pfRole()"><option value="pending">No access yet</option><option value="teacher">Class teacher</option><option value="admin">Administrator</option></select></div>
+            <div class="field full" id="pf_cls_wrap"><label>Classes (each class has one class teacher)</label><div class="chk" id="pf_cls"></div></div>
+          </div>
+          <div class="foot">
+            <button class="btn primary" onclick="savePf()">Save access</button>
+            <button class="btn secondary" onclick="$('pf_box').classList.add('hidden')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin:0 0 16px">
+          <h2>Classes and class teachers</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Class</th><th>Active students</th><th>Class teacher</th></tr></thead>
+              <tbody id="clsTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin:0">
+          <h2>Recent activity</h2>
+          <ul class="rows" id="tact"></ul>
+        </div>
+      </section>
+
+      <!-- 9. REPORTS VIEW -->
+      <section id="reports" class="view">
+        <div class="card" style="margin:0">
+          <div class="toolbar">
+            <select id="rsel" onchange="rReport()" aria-label="Report">
+              <option value="student">Student register</option>
+              <option value="staff">Teacher &amp; staff register</option>
+              <option value="doc">Document register</option>
+              <option value="marks">Marks register</option>
+              <option value="attendance">Attendance register</option>
+              <option value="missing">Missing documents</option>
+            </select>
+            <span class="muted grow" id="rcount" style="align-self:center;font-size:13px"></span>
+            <button class="btn secondary" onclick="window.print()">Print</button>
+            <button class="btn secondary" onclick="exp($('rsel').value,'csv')">CSV</button>
+            <button class="btn secondary" onclick="exp($('rsel').value,'pdf')">PDF</button>
+            <button class="btn primary" onclick="exp($('rsel').value,'xlsx')">Excel</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table" id="rtable"></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. NOTICE BOARD & CIRCULARS (CRUD CENTER) -->
+      <section id="notices" class="view">
+        <div class="card" style="margin:0 0 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
+            <div>
+              <h2 style="margin:0">Official Notice Board &amp; Circulars</h2>
+              <p class="muted" style="margin:4px 0 0;font-size:13px">Publish, edit, and organize institutional announcements, academic schedules, and official notices.</p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn secondary" onclick="printView('notices','Official Notice Board & Circulars')">🖨 Print Board</button>
+              <button class="btn primary" onclick="openNoticeForm()">＋ Post Announcement</button>
+            </div>
+          </div>
+
+          <!-- Stat Counters -->
+          <div class="audit-metrics" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px;">
+            <div class="audit-stat">
+              <small>TOTAL NOTICES</small>
+              <strong id="noticesTotalCount">0</strong>
+              <span>All circulars</span>
+            </div>
+            <div class="audit-stat">
+              <small>ACTIVE</small>
+              <strong id="noticesActiveCount" style="color:var(--emerald-700)">0</strong>
+              <span>Published &amp; live</span>
+            </div>
+            <div class="audit-stat">
+              <small>IMPORTANT / URGENT</small>
+              <strong id="noticesUrgentCount" style="color:#b43d48">0</strong>
+              <span>High priority</span>
+            </div>
+            <div class="audit-stat">
+              <small>ARCHIVED / DRAFT</small>
+              <strong id="noticesArchiveCount" style="color:var(--gold-600)">0</strong>
+              <span>Past records</span>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="toolbar" style="margin:0;gap:10px;flex-wrap:wrap;">
+            <input id="notices_q" class="input grow" placeholder="Search notices by title, keyword, or author..." oninput="rNotices()" style="min-width:220px" aria-label="Search circulars">
+            <select id="notices_cat" onchange="rNotices()" aria-label="Category">
+              <option value="all">All Categories</option>
+              <option value="Academic">Academic</option>
+              <option value="Examination">Examination</option>
+              <option value="Islamic Holiday">Islamic Holidays</option>
+              <option value="Administrative">Administrative</option>
+              <option value="Events">Campus Events</option>
+              <option value="Fee &amp; Finance">Fee &amp; Finance</option>
+            </select>
+            <select id="notices_aud" onchange="rNotices()" aria-label="Audience">
+              <option value="all">All Audiences</option>
+              <option value="All Campus">All Campus</option>
+              <option value="Students">Students Only</option>
+              <option value="Faculty &amp; Staff">Faculty &amp; Staff</option>
+              <option value="Parents">Parents &amp; Guardians</option>
+            </select>
+            <select id="notices_st" onchange="rNotices()" aria-label="Status">
+              <option value="all">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Draft">Draft</option>
+              <option value="Archived">Archived</option>
+            </select>
+            <button class="btn sm secondary" onclick="$('notices_q').value='';$('notices_cat').value='all';$('notices_aud').value='all';$('notices_st').value='all';rNotices();">Reset</button>
+          </div>
+        </div>
+
+        <!-- Notices Cards Grid -->
+        <div class="notices-grid" id="noticesGrid"></div>
+      </section>
+
+      <!-- 11. SETTINGS VIEW -->
+      <section id="settings" class="view">
+        <div class="card" style="max-width:760px;margin:0">
+          <h2>Settings</h2>
+          <div class="set">
+            <b>College details</b>
+            <p>Shown on ID cards and certificates.</p>
+            <div class="formgrid">
+              <div class="field full"><label for="o_name">College name</label><input id="o_name"></div>
+              <div class="field"><label for="o_addr">Address</label><input id="o_addr"></div>
+              <div class="field"><label for="o_phone">Phone</label><input id="o_phone"></div>
+              <div class="field"><label for="o_pr">Principal (signs certificates)</label><input id="o_pr"></div>
+              <div class="field"><label for="o_mrca">MRCA registration number</label><input id="o_mrca" placeholder="Shown on ID cards and certificates"></div>
+              <div class="field">
+                <label for="o_hadj">Hijri date adjustment (moon sighting)</label>
+                <select id="o_hadj">
+                  <option value="-2">2 days earlier</option>
+                  <option value="-1">1 day earlier</option>
+                  <option value="0">No change</option>
+                  <option value="1">1 day later</option>
+                  <option value="2">2 days later</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="o_logo">Logo (optional)</label>
+                <div class="photo-pick">
+                  <span id="o_prev"></span>
+                  <input id="o_logo" type="file" accept="image/*" onchange="pickLogo(this)">
+                </div>
+              </div>
+            </div>
+            <button class="btn primary" style="margin-top:12px" onclick="saveOrg()">Save college details</button>
+          </div>
+
+          <div class="set">
+            <b>Change password</b>
+            <p>Used to sign in on every device.</p>
+            <div class="formgrid">
+              <div class="field"><label for="pw1">New password (6+ characters)</label><input id="pw1" type="password" autocomplete="new-password"></div>
+              <div class="field"><label for="pw2">Confirm new password</label><input id="pw2" type="password" autocomplete="new-password"></div>
+            </div>
+            <button class="btn primary" style="margin-top:12px" onclick="changePw()">Update password</button>
+          </div>
+
+          <div class="set">
+            <b>Backup and restore</b>
+            <p>Records are stored in your online college database. A backup downloads a copy to this computer.</p>
+            <button class="btn secondary" onclick="backup()">Download backup</button>
+            <button class="btn secondary" onclick="backup(true)">Full backup with files</button>
+            <button class="btn secondary" onclick="$('rfile').click()">Restore from backup</button>
+            <input id="rfile" type="file" accept=".json" class="hidden" onchange="restore(this)">
+          </div>
+
+          <div class="set">
+            <b>Safety copies</b>
+            <p>The last 5 copies are kept automatically before risky actions. Use one to undo a mistake.</p>
+            <ul class="rows" id="snaplist"></ul>
+          </div>
+
+          <div class="set">
+            <b>Recent activity</b>
+            <p>The last 15 changes made on this device.</p>
+            <ul class="rows" id="actlog"></ul>
+          </div>
+        </div>
+
+        <!-- Dedicated Global Audit Log Card -->
+        <div class="card" style="margin-top:20px;max-width:1000px;" id="globalAuditCard">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:16px;">
+            <div>
+              <h2 style="margin:0;display:flex;align-items:center;gap:8px;">
+                <span style="color:#dfc495;font-size:20px">🛡️</span> Global Audit Log
+              </h2>
+              <p class="muted" style="margin:4px 0 0;font-size:13px">
+                Comprehensive, time-stamped history of all database modifications, admissions, marks, attendance, and security events for institutional accountability.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <button class="btn sm secondary" onclick="refreshGlobalAudit()" title="Reload audit records from online college database">🔄 Refresh</button>
+              <button class="btn sm secondary" onclick="exportAuditLog('csv')" title="Download official CSV audit trail">📥 Export CSV</button>
+              <button class="btn sm secondary" onclick="exportAuditLog('json')" title="Export full JSON structured audit log">📥 Export JSON</button>
+            </div>
+          </div>
+
+          <!-- Audit Metrics Row -->
+          <div class="audit-metrics">
+            <div class="audit-stat">
+              <small>TOTAL LOGGED</small>
+              <strong id="auditTotalCount">0 events</strong>
+              <span>Database &amp; session log</span>
+            </div>
+            <div class="audit-stat">
+              <small>FILTERED MATCHES</small>
+              <strong id="auditFilterCount">0 showing</strong>
+              <span>Active search scope</span>
+            </div>
+            <div class="audit-stat">
+              <small>SECURITY ACTIONS</small>
+              <strong id="auditSecCount">0 security</strong>
+              <span>Auth, delete &amp; roles</span>
+            </div>
+            <div class="audit-stat">
+              <small>LAST ACTIVITY</small>
+              <strong id="auditLastMod">None</strong>
+              <span>Most recent modification</span>
+            </div>
+          </div>
+
+          <!-- Audit Log Filter Toolbar -->
+          <div class="toolbar" style="margin:16px 0 12px;gap:10px;flex-wrap:wrap;align-items:center;">
+            <input id="audit_q" class="input grow" placeholder="Filter by user, action description, ID..." oninput="rGlobalAudit()" style="min-width:200px" aria-label="Search audit log">
+            <select id="audit_cat" onchange="rGlobalAudit()" aria-label="Filter by category">
+              <option value="all">All Categories</option>
+              <option value="student">Students</option>
+              <option value="staff">Staff &amp; Faculty</option>
+              <option value="marks">Mark Sheets &amp; Exams</option>
+              <option value="attendance">Attendance</option>
+              <option value="document">Documents &amp; Verification</option>
+              <option value="security">Security &amp; Accounts</option>
+              <option value="backup">System &amp; Backups</option>
+            </select>
+            <select id="audit_actor" onchange="rGlobalAudit()" aria-label="Filter by user">
+              <option value="all">All Users / Actors</option>
+            </select>
+            <div class="audit-date-group">
+              <label for="audit_from" class="audit-date-label">
+                <span>📅</span>
+                <span>From:</span>
+              </label>
+              <input id="audit_from" type="date" class="audit-date-input" onchange="rGlobalAudit()" aria-label="Start date" title="Filter from start date">
+              <span style="color:var(--gold-400);font-weight:bold;margin:0 2px;">—</span>
+              <label for="audit_to" class="audit-date-label">
+                <span>To:</span>
+              </label>
+              <input id="audit_to" type="date" class="audit-date-input" onchange="rGlobalAudit()" aria-label="End date" title="Filter to end date">
+            </div>
+            <button class="btn sm secondary" onclick="$('audit_q').value='';$('audit_cat').value='all';$('audit_actor').value='all';if($('audit_from'))$('audit_from').value='';if($('audit_to'))$('audit_to').value='';rGlobalAudit();">Reset</button>
+          </div>
+
+          <!-- Audit Log Table -->
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="min-width:160px">Timestamp</th>
+                  <th style="min-width:140px">Actor / User</th>
+                  <th style="min-width:130px">Category</th>
+                  <th style="min-width:260px">Modification Details</th>
+                  <th style="min-width:90px">Source</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody"></tbody>
+            </table>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:8px;">
+            <span>Immutable timestamped ledger conforming to college security and accountability policies.</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="color:#dfc495">۞</span> Real-time synchronization</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Drawers & Modals -->
+  <div id="scrim" onclick="closeDrawer()"></div>
+  <aside id="dr" aria-label="Student file"></aside>
+
+  <!-- Add / Edit Modal -->
+  <div id="mform" class="modal">
+    <div class="card">
+      <h2 id="mt"></h2>
+      <div class="formgrid" id="mb" style="margin-top:14px"></div>
+      <div class="foot">
+        <button class="btn primary" onclick="saveForm()">Save</button>
+        <button class="btn secondary" onclick="closeForm()">Cancel</button>
+        <button class="btn danger" id="mdel" style="margin-left:auto" onclick="delCur()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Modal -->
+  <div id="mprint" class="modal">
+    <div class="card">
+      <div class="ph noprint">
+        <h2 id="pt"></h2>
+        <div class="exp">
+          <button class="btn primary" onclick="doPrint()">Print</button>
+          <button class="btn secondary" onclick="savePrintable()">Save as file</button>
+          <button class="btn secondary" onclick="$('mprint').classList.remove('open')">Close</button>
+        </div>
+      </div>
+      <div id="popts" class="noprint"></div>
+      <div id="pbody"></div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div id="mview" class="modal" onclick="if(event.target==this)this.classList.remove('open')">
+    <div class="card" id="mvb" style="text-align:center"></div>
+  </div>
+
+  <!-- Notice Create & Edit Modal -->
+  <div id="mnotice" class="modal">
+    <div class="card" style="max-width:680px">
+      <h2 id="mnotice_title">Post Announcement</h2>
+      <div class="formgrid" style="margin-top:14px">
+        <input type="hidden" id="mnotice_id">
+        <div class="field full">
+          <label for="mnotice_t">Announcement Title / Subject *</label>
+          <input id="mnotice_t" class="input" placeholder="e.g. Ramadan Special Timetable 1447 AH">
+        </div>
+        <div class="field">
+          <label for="mnotice_cat">Category *</label>
+          <select id="mnotice_cat">
+            <option value="Academic">Academic</option>
+            <option value="Examination">Examination</option>
+            <option value="Islamic Holiday">Islamic Holiday</option>
+            <option value="Administrative">Administrative</option>
+            <option value="Events">Campus Events</option>
+            <option value="Fee &amp; Finance">Fee &amp; Finance</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mnotice_prio">Priority *</label>
+          <select id="mnotice_prio">
+            <option value="Normal">Normal</option>
+            <option value="Important">Important</option>
+            <option value="Urgent">Urgent / Alert</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mnotice_aud">Target Audience *</label>
+          <select id="mnotice_aud">
+            <option value="All Campus">All Campus</option>
+            <option value="Students">Students Only</option>
+            <option value="Faculty &amp; Staff">Faculty &amp; Staff</option>
+            <option value="Parents">Parents &amp; Guardians</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mnotice_date">Publish Date *</label>
+          <input id="mnotice_date" type="date" class="input">
+        </div>
+        <div class="field">
+          <label for="mnotice_author">Author / Office *</label>
+          <input id="mnotice_author" class="input" placeholder="e.g. Office of the Principal">
+        </div>
+        <div class="field">
+          <label for="mnotice_status">Status *</label>
+          <select id="mnotice_status">
+            <option value="Active">Active (Published)</option>
+            <option value="Draft">Draft</option>
+            <option value="Archived">Archived</option>
+          </select>
+        </div>
+        <div class="field full" style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="mnotice_pinned" style="width:18px;height:18px;cursor:pointer;">
+          <label for="mnotice_pinned" style="margin:0;cursor:pointer;">📌 Pin this notice to the top of the board and dashboard</label>
+        </div>
+        <div class="field full">
+          <label for="mnotice_body">Announcement Details &amp; Message *</label>
+          <textarea id="mnotice_body" class="input" rows="6" placeholder="Enter complete circular text, instructions, and dates..."></textarea>
+        </div>
+      </div>
+      <div class="foot" style="margin-top:16px;">
+        <button class="btn primary" onclick="saveNoticeForm()">Save Announcement</button>
+        <button class="btn secondary" onclick="$('mnotice').classList.remove('open')">Cancel</button>
+        <button class="btn danger" id="mnotice_del" style="margin-left:auto" onclick="delNotice(noticeCurIdx)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notice Reader & Circular Print Modal -->
+  <div id="mnotice_view" class="modal">
+    <div class="card" style="max-width:840px;max-height:90vh;overflow-y:auto;">
+      <div class="ph noprint" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h2 style="margin:0">Official Circular</h2>
+        <div class="exp">
+          <button class="btn primary" id="mnotice_view_print_btn">🖨 Print Circular</button>
+          <button class="btn secondary" onclick="$('mnotice_view').classList.remove('open')">Close</button>
+        </div>
+      </div>
+      <div id="mv_notice_content"></div>
+    </div>
+  </div>
+
+  <!-- Single Mark Entry CRUD Modal -->
+  <div id="mmark" class="modal">
+    <div class="card" style="max-width:600px">
+      <h2 id="mmark_title">Add Single Exam Mark</h2>
+      <div id="mmark_body" style="margin-top:14px"></div>
+      <div class="foot" style="margin-top:16px;">
+        <button class="btn primary" id="mmark_save">Save Mark</button>
+        <button class="btn secondary" onclick="$('mmark').classList.remove('open')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" role="status"></div>
+
+  <!-- Application Bootstrap -->
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

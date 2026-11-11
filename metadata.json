@@ -1,0 +1,6 @@
+{
+  "name": "Al-Dheeniyya Arabic College",
+  "description": "Luxury premium Islamic 3D records management system for Al-Dheeniyya Arabic College, featuring comprehensive student, staff, marks, attendance, certificates, and ID card administration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
